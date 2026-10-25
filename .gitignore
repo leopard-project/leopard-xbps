@@ -1,0 +1,13 @@
+# 构建产物 + 拉取源码（fetch.sh）
+out/
+.pkg/
+build.ninja
+.ninja_deps
+.ninja_log
+*.o
+*.elf
+*.xbps
+*.tar.gz
+src/
+deps/
+toolchain/
