@@ -85,8 +85,8 @@ echo "[build] libressl OK"
 # ---------- 6. xbps（只编 .static，跳过 libxbps.so —— musl protected 符号不支持共享库） ----------
 cd src/xbps
 export PKG_CONFIG_PATH="$PFX/lib/pkgconfig"
-# LeopardOS 运行时路径：配置 /system/etc/xbps.d、pkgdb /system/var/db/xbps、默认配置 /system/share/xbps.d
-CC="$MUSL_GCC" ./configure --prefix=/system --sysconfdir=/system/etc --dbdir=/system/var/db/xbps --enable-static --disable-debug >/dev/null
+# LeopardOS 运行时路径：配置 /config/xbps.d、pkgdb var/db/xbps（相对 rootdir）
+CC="$MUSL_GCC" ./configure --prefix=/system --sysconfdir=/config --dbdir=var/db/xbps --enable-static --disable-debug >/dev/null
 make -C lib clean >/dev/null 2>&1
 make -C lib libxbps.a -j"$NPROC" >/dev/null
 mkdir -p "$ROOT/out"
