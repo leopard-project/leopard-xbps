@@ -11,7 +11,7 @@ int main(int argc, char **argv)
         (void)argv;
         printf("probe: musl static OK\n");
 
-        /* mmap 匿名 + 写 + 读 + munmap */
+        /* anonymous mmap + write + read + munmap */
         size_t n = 4096;
         char *p = mmap(NULL, n, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
         if (p == MAP_FAILED) {

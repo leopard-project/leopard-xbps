@@ -1,8 +1,8 @@
 #!/bin/sh
-# fetch.sh — 拉取 spike 全部源码
-# 注意：
-#  1. musl 走 GitHub 镜像（musl.libc.org 本机只解析 IPv6 且不通）
-#  2. libressl 的 git 仓库不提交 VERSION/符号表，必须用 release tarball
+# fetch.sh — fetch all spike sources
+# Notes:
+#  1. musl comes from a GitHub mirror (musl.libc.org resolves to IPv6 only here and is unreachable)
+#  2. the libressl git repo does not commit VERSION/symbol tables, so use the release tarball
 set -eu
 cd "$(dirname "$0")"
 mkdir -p src

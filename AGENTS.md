@@ -1,7 +1,7 @@
 # AGENTS.md — leopard-xbps
 
 ## 铁律
-- 用户态逻辑**禁止**写回 OpenXSKernel / OpenXJ380。
+- 用户态逻辑**禁止**写回 leopard-xsk / OpenXJ380。
 - 本仓库只产出静态用户态二进制 + 构建脚本；不碰内核、不碰引导。
 - 依赖临时 stage 到 LeopardOS（make_image.sh），未来由 xbps 接管。
 

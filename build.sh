@@ -1,6 +1,6 @@
 #!/bin/sh
-# build.sh — musl 工具链 → 依赖 → xbps 全静态构建
-# 用法：./fetch.sh && ./build.sh
+# build.sh — musl toolchain → dependencies → fully static xbps build
+# Usage: ./fetch.sh && ./build.sh
 set -eu
 cd "$(dirname "$0")"
 ROOT="$(pwd)"
@@ -8,7 +8,7 @@ TC="$ROOT/toolchain"
 PFX="$ROOT/deps/prefix"
 NPROC="$(nproc)"
 
-# ---------- 1. musl 静态工具链 ----------
+# ---------- 1. musl static toolchain ----------
 if [ ! -x "$TC/bin/musl-gcc" ]; then
   cd src/musl
   ./configure --prefix="$TC" --disable-shared >/dev/null
@@ -82,10 +82,10 @@ if [ ! -f "$PFX/lib/libcrypto.a" ]; then
 fi
 echo "[build] libressl OK"
 
-# ---------- 6. xbps（只编 .static，跳过 libxbps.so —— musl protected 符号不支持共享库） ----------
+# ---------- 6. xbps (build .static only, skip libxbps.so — musl protected symbols break shared libs) ----------
 cd src/xbps
 export PKG_CONFIG_PATH="$PFX/lib/pkgconfig"
-# LeopardOS 运行时路径：配置 /config/xbps.d、pkgdb var/db/xbps（相对 rootdir）
+# LeopardOS runtime paths: config in /config/xbps.d, pkgdb in var/db/xbps (relative to rootdir)
 CC="$MUSL_GCC" ./configure --prefix=/system --sysconfdir=/config --dbdir=var/db/xbps --enable-static --disable-debug >/dev/null
 make -C lib clean >/dev/null 2>&1
 make -C lib libxbps.a -j"$NPROC" >/dev/null
@@ -96,7 +96,7 @@ for t in xbps-create xbps-install xbps-query xbps-rindex xbps-remove xbps-pkgdb;
   cp bin/$t/$t.static "$ROOT/out/$t"
 done
 cd "$ROOT"
-# 打上 ELFOSABI_LINUX：OpenXSKernel 靠 EI_OSABI(字节7) 区分 Linux ABI 与 XAPI ABI
+# Stamp ELFOSABI_LINUX: leopard-xsk tells the Linux ABI from the XAPI ABI via EI_OSABI (byte 7)
 for t in xbps-create xbps-install xbps-query xbps-rindex xbps-remove xbps-pkgdb; do
     [ -f "$ROOT/out/$t" ] && printf '\003' | dd of="$ROOT/out/$t" bs=1 seek=7 conv=notrunc 2>/dev/null
 done
